@@ -6,7 +6,9 @@ export default function Movies() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const [themes, setThemes] = useState([]);
-  const [activeTheme, setActiveTheme] = useState(searchParams.get("theme") || null);
+  const [activeTheme, setActiveTheme] = useState(
+    searchParams.get("theme") || null
+  );
   const [loading, setLoading] = useState(true);
   const [displayCount, setDisplayCount] = useState(12);
 
