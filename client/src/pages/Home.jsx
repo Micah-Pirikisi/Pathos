@@ -12,10 +12,18 @@ export default function Home() {
       .then((r) => r.json())
       .then((data) => {
         setFeatured(data.filter((m) => m.featured));
-        // Randomly select a film of the week
+        // Select film of the week based on week number (changes every Monday)
         if (data.length > 0) {
-          const randomFilm = data[Math.floor(Math.random() * data.length)];
-          setFilmOfWeek(randomFilm);
+          const now = new Date();
+          const start = new Date(now.getFullYear(), 0, 1);
+          const diff = now - start;
+          const oneDay = 86400000;
+          const dayOfYear = Math.floor(diff / oneDay);
+          const weekNumber = Math.floor(dayOfYear / 7);
+          
+          // Use week number as deterministic seed for consistent selection throughout the week
+          const filmIndex = weekNumber % data.length;
+          setFilmOfWeek(data[filmIndex]);
         }
         // Get recently added films (last 6)
         setRecentlyAdded(data.slice(-6).reverse());
