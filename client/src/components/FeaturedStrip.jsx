@@ -26,7 +26,31 @@ export function FeaturedStrip({ movies }) {
               <p style={{ color: "var(--muted)", margin: "0.3rem 0" }}>
                 {m.tagline}
               </p>
-              {m.theme && <span className="tag">{m.theme}</span>}
+              {m.theme && (
+                <Link
+                  to={`/movies?theme=${m.theme}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <span
+                    className="tag"
+                    style={{
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      opacity: 0.8,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.opacity = "1";
+                      e.target.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.opacity = "0.8";
+                      e.target.style.transform = "translateY(0)";
+                    }}
+                  >
+                    {m.theme}
+                  </span>
+                </Link>
+              )}
             </div>
             <Link className="meta" to={`/movies/${m.slug}`}>
               See Details →

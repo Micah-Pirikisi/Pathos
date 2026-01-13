@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { MovieGrid } from "../components/MovieGrid.jsx";
 
 export default function Movies() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const [themes, setThemes] = useState([]);
-  const [activeTheme, setActiveTheme] = useState(null);
+  const [activeTheme, setActiveTheme] = useState(searchParams.get("theme") || null);
   const [loading, setLoading] = useState(true);
   const [displayCount, setDisplayCount] = useState(12);
 
@@ -57,6 +59,11 @@ export default function Movies() {
             onFilter={(theme) => {
               setActiveTheme(theme);
               setDisplayCount(12);
+              if (theme) {
+                setSearchParams({ theme });
+              } else {
+                setSearchParams({});
+              }
             }}
           />
           {hasMore && (
