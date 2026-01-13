@@ -14,8 +14,15 @@ app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-// Serve static files from client/dist
-app.use(express.static(path.join(__dirname, "../client/dist")));
+// Serve static files from client/dist (but not API routes)
+app.use(express.static(path.join(__dirname, "../client/dist"), {
+  // Don't serve index.html for /api routes
+  setHeaders: (res, path) => {
+    if (path.endsWith("index.html")) {
+      res.setHeader("Cache-Control", "no-cache");
+    }
+  }
+}));
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
@@ -204,9 +211,14 @@ app.get("/api/themes", async (_req, res) => {
   res.json(themes.map((t) => t.theme));
 });
 
-// Serve React app for all other routes (client-side routing)
-app.use((_req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+// Serve React app for all non-API routes (client-side routing)
+app.use((req, res) => {
+  // Only serve index.html for non-API requests
+  if (!req.path.startsWith("/api")) {
+    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+  } else {
+    res.status(404).json({ message: "API endpoint not found" });
+  }
 });
 
 const port = process.env.PORT || 4000;
