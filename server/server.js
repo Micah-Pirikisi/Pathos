@@ -4,12 +4,18 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prismaClient.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+// Serve static files from client/dist
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
@@ -196,6 +202,11 @@ app.get("/api/themes", async (_req, res) => {
     distinct: ["theme"],
   });
   res.json(themes.map((t) => t.theme));
+});
+
+// Serve React app for all other routes (client-side routing)
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 const port = process.env.PORT || 4000;
