@@ -47,8 +47,11 @@ export function FeaturedStrip({ movies }) {
                       transition: "all 0.2s ease",
                       opacity: 0.8,
                       color: themeColors[m.theme] || "var(--accent-primary)",
-                      borderColor: themeColors[m.theme] || "var(--accent-primary)",
-                      backgroundColor: `${themeColors[m.theme] || "var(--accent-primary)"}20`,
+                      borderColor:
+                        themeColors[m.theme] || "var(--accent-primary)",
+                      backgroundColor: `${
+                        themeColors[m.theme] || "var(--accent-primary)"
+                      }20`,
                     }}
                     onMouseEnter={(e) => {
                       e.target.style.opacity = "1";

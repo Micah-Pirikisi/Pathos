@@ -423,7 +423,7 @@ header nav a:hover {
   content: attr(data-tip);
   position: absolute;
   left: 0;
-  top: 105%;
+  top: 100%;
   width: 260px;
   background: rgba(15, 22, 41, 0.95);
   color: var(--ink);
