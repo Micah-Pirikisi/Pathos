@@ -1,0 +1,92 @@
+:root {
+  --bg: #0b0d12;
+  --panel: #111624;
+  --ink: #e9ecf5;
+  --muted: #97a0b8;
+  --accent: #ff7b5f;
+  --accent-2: #7bd7ff;
+  --border: #1f2a3d;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+
+header nav a {
+  color: var(--muted);
+}
+header nav a:hover {
+  color: var(--ink);
+}
+
+.meta {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.poster {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 123, 95, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(255, 123, 95, 0.3);
+  font-size: 0.8rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 0;
+  top: 105%;
+  width: 260px;
+  background: #0f1627;
+  color: var(--ink);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  font-size: 0.9rem;
+}
