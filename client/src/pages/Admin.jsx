@@ -146,8 +146,8 @@ export default function Admin() {
 
       const method = editingId ? "PUT" : "POST";
       const endpoint = editingId
-        ? `http://localhost:4000/api/movies/${editingId}`
-        : "http://localhost:4000/api/movies";
+        ? `/api/movies/${editingId}`
+        : "/api/movies";
 
       const res = await fetch(endpoint, {
         method,
@@ -206,7 +206,7 @@ export default function Admin() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:4000/api/movies/${id}`, {
+      const res = await fetch(`/api/movies/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
