@@ -20,7 +20,7 @@ export default function Home() {
           const oneDay = 86400000;
           const dayOfYear = Math.floor(diff / oneDay);
           const weekNumber = Math.floor(dayOfYear / 7);
-          
+
           // Use week number as deterministic seed for consistent selection throughout the week
           const filmIndex = weekNumber % data.length;
           setFilmOfWeek(data[filmIndex]);
