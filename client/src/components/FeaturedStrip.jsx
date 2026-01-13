@@ -29,7 +29,7 @@ export function FeaturedStrip({ movies }) {
               {m.theme && <span className="tag">{m.theme}</span>}
             </div>
             <Link className="meta" to={`/movies/${m.slug}`}>
-              Read notes →
+              See Details →
             </Link>
           </article>
         ))}

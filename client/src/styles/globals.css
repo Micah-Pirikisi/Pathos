@@ -147,11 +147,11 @@ main.shell {
 }
 
 .movie-card[data-theme="discomfort"] {
-  border: 2px solid var(--accent-primary) !important;
+  border: 2px solid #ff6b35 !important;
 }
 
 .movie-card[data-theme="discomfort"]:hover {
-  border-color: var(--accent-primary) !important;
+  border-color: #ff6b35 !important;
   box-shadow: 0 0 20px rgba(255, 107, 53, 0.4),
     0 30px 80px rgba(255, 107, 53, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
@@ -217,6 +217,162 @@ header nav a:hover {
   transform: translateY(-4px) scale(1.02);
   filter: brightness(1.1);
   box-shadow: 0 16px 48px rgba(255, 107, 53, 0.25);
+}
+
+/* Load More Button */
+.load-more-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    rgba(192, 201, 224, 0.7)
+  );
+  border: 1px solid var(--accent-primary);
+  color: var(--ink);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.load-more-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(192, 201, 224, 0.9),
+    var(--accent-primary)
+  );
+  box-shadow: 0 0 20px rgba(192, 201, 224, 0.3);
+  transform: translateY(-2px);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.breadcrumbs a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbs a:hover {
+  color: var(--ink);
+}
+
+.breadcrumbs span {
+  color: var(--muted);
+}
+
+/* Skeleton Loaders */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(192, 201, 224, 0.1) 0%,
+    rgba(192, 201, 224, 0.2) 50%,
+    rgba(192, 201, 224, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-card {
+  padding: 0.6rem;
+  height: 400px;
+  border-radius: 12px;
+}
+
+.skeleton-text {
+  height: 0.8rem;
+  margin: 0.5rem 0;
+}
+
+.skeleton-text.large {
+  height: 1.2rem;
+  margin: 1rem 0;
+}
+
+/* Theme-specific glows for detail page */
+.movie-detail-card[data-theme="hope"] {
+  border-color: var(--accent-gold) !important;
+}
+
+.movie-detail-card[data-theme="hope"]:hover {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4),
+    0 30px 80px rgba(251, 191, 36, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.movie-detail-card[data-theme="release"] {
+  border-color: var(--accent-ruby) !important;
+}
+
+.movie-detail-card[data-theme="release"]:hover {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4),
+    0 30px 80px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.movie-detail-card[data-theme="discomfort"] {
+  border-color: #ff6b35 !important;
+}
+
+.movie-detail-card[data-theme="discomfort"]:hover {
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.4),
+    0 30px 80px rgba(255, 107, 53, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.movie-detail-card[data-theme="courage"] {
+  border-color: var(--accent-emerald) !important;
+}
+
+.movie-detail-card[data-theme="courage"]:hover {
+  box-shadow: 0 0 20px rgba(16, 217, 129, 0.4),
+    0 30px 80px rgba(16, 217, 129, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.movie-detail-card[data-theme="reflection"] {
+  border-color: var(--accent-sapphire) !important;
+}
+
+.movie-detail-card[data-theme="reflection"]:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
+    0 30px 80px rgba(59, 130, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.movie-detail-card[data-theme="existential"] {
+  border-color: var(--accent-purple) !important;
+}
+
+.movie-detail-card[data-theme="existential"]:hover {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
+    0 30px 80px rgba(168, 85, 247, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 .tag {
@@ -373,21 +529,6 @@ h2 {
   font-size: 1.875rem;
   margin: 0 0 0.8rem 0;
   color: var(--ink);
-}
-
-h2::before {
-  content: "";
-  display: inline-block;
-  width: 4px;
-  height: 1.875rem;
-  background: linear-gradient(
-    180deg,
-    var(--accent-primary),
-    var(--accent-gold)
-  );
-  margin-right: 0.75rem;
-  border-radius: 2px;
-  box-shadow: 0 0 12px rgba(255, 107, 53, 0.3);
 }
 
 h3 {

@@ -21,12 +21,56 @@ export default function MovieDetail() {
       .then(setMovie);
   }, [slug]);
 
-  if (!movie) return <main className="shell">Loading…</main>;
+  if (!movie)
+    return (
+      <main className="shell">
+        <nav className="breadcrumbs">
+          <span style={{ color: "var(--muted)" }}>Films</span>
+          <span>/</span>
+          <span style={{ color: "var(--muted)" }}>Loading...</span>
+        </nav>
+        <article className="card" style={{ padding: "1.5rem" }}>
+          <div
+            style={{
+              display: "grid",
+              gap: "1rem",
+              gridTemplateColumns: "minmax(260px, 320px) 1fr",
+            }}
+          >
+            <div className="skeleton skeleton-card"></div>
+            <div>
+              <div
+                className="skeleton skeleton-text"
+                style={{ width: "30%" }}
+              ></div>
+              <div
+                className="skeleton skeleton-text large"
+                style={{ width: "60%", marginTop: "1rem" }}
+              ></div>
+              <div
+                className="skeleton skeleton-text"
+                style={{ width: "40%", marginTop: "0.5rem" }}
+              ></div>
+              <div
+                className="skeleton skeleton-text"
+                style={{ width: "100%", marginTop: "1.5rem", height: "3rem" }}
+              ></div>
+            </div>
+          </div>
+        </article>
+      </main>
+    );
 
   return (
     <main className="shell">
+      <nav className="breadcrumbs">
+        <Link to="/movies">Films</Link>
+        <span>/</span>
+        <span>{movie.title}</span>
+      </nav>
       <article
-        className="card"
+        className="card movie-detail-card"
+        data-theme={movie.theme}
         style={{
           padding: "1.5rem",
           display: "grid",

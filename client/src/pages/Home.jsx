@@ -5,6 +5,7 @@ import { FeaturedStrip } from "../components/FeaturedStrip.jsx";
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [filmOfWeek, setFilmOfWeek] = useState(null);
+  const [recentlyAdded, setRecentlyAdded] = useState([]);
 
   useEffect(() => {
     fetch("/api/movies")
@@ -16,6 +17,8 @@ export default function Home() {
           const randomFilm = data[Math.floor(Math.random() * data.length)];
           setFilmOfWeek(randomFilm);
         }
+        // Get recently added films (last 6)
+        setRecentlyAdded(data.slice(-6).reverse());
       });
   }, []);
 
@@ -60,8 +63,9 @@ export default function Home() {
             <div
               style={{
                 display: "grid",
-                gap: "1rem",
-                gridTemplateColumns: "minmax(180px, 200px) 1fr",
+                gap: "1.5rem",
+                gridTemplateColumns: "minmax(160px, 180px) 1fr",
+                alignItems: "start",
               }}
             >
               <img
@@ -79,7 +83,8 @@ export default function Home() {
                       existential: "#a855f7",
                     }[filmOfWeek.theme] || "#c0c9e0"
                   }`,
-                  height: "280px",
+                  height: "240px",
+                  width: "100%",
                   objectFit: "cover",
                   cursor: "pointer",
                 }}
@@ -88,21 +93,10 @@ export default function Home() {
                 <h3
                   style={{
                     fontFamily: "serif",
-                    fontSize: "1.4rem",
-                    margin: "0 0 0.3rem",
-                    background: `linear-gradient(135deg, ${
-                      {
-                        hope: "#fbbf24",
-                        release: "#ef4444",
-                        discomfort: "#ff6b35",
-                        courage: "#10d981",
-                        reflection: "#3b82f6",
-                        existential: "#a855f7",
-                      }[filmOfWeek.theme] || "var(--accent-primary)"
-                    }, var(--ink))`,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
+                    fontSize: "1.3rem",
+                    margin: "0 0 0.5rem",
+                    color: "var(--ink)",
+                    lineHeight: 1.3,
                   }}
                 >
                   {filmOfWeek.title}
@@ -119,11 +113,12 @@ export default function Home() {
                 <p
                   style={{
                     color: "var(--ink)",
-                    lineHeight: 1.6,
-                    marginBottom: "1rem",
+                    lineHeight: 1.5,
+                    marginBottom: "0.8rem",
+                    fontSize: "0.95rem",
                   }}
                 >
-                  {filmOfWeek.synopsis.substring(0, 200)}...
+                  {filmOfWeek.synopsis.substring(0, 180)}...
                 </p>
                 <p
                   style={{
@@ -138,6 +133,96 @@ export default function Home() {
               </div>
             </div>
           </Link>
+        </section>
+      )}
+
+      {recentlyAdded.length > 0 && (
+        <section
+          className="card"
+          style={{ padding: "1.5rem", marginTop: "1.5rem" }}
+        >
+          <p
+            style={{
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              fontSize: "0.78rem",
+              color: "var(--muted)",
+              marginBottom: "1rem",
+            }}
+          >
+            Recently Added
+          </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+              gap: "1rem",
+            }}
+          >
+            {recentlyAdded.map((film) => (
+              <Link
+                key={film.id}
+                to={`/movies/${film.slug}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div
+                  className="card"
+                  data-theme={film.theme}
+                  style={{
+                    padding: "0.6rem",
+                    background: "#0f1420",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <img
+                    src={film.posterUrl}
+                    alt={film.title}
+                    style={{
+                      height: "220px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                      marginBottom: "0.6rem",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <h4
+                    style={{
+                      fontFamily: "serif",
+                      fontSize: "0.95rem",
+                      margin: "0 0 0.2rem",
+                      background: `linear-gradient(135deg, ${
+                        {
+                          hope: "#fbbf24",
+                          release: "#ef4444",
+                          discomfort: "#ff6b35",
+                          courage: "#10d981",
+                          reflection: "#3b82f6",
+                          existential: "#a855f7",
+                        }[film.theme] || "var(--accent-primary)"
+                      }, var(--ink))`,
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    {film.title}
+                  </h4>
+                  <p
+                    style={{
+                      color: "var(--muted)",
+                      margin: 0,
+                      fontSize: "0.8rem",
+                      flex: 1,
+                    }}
+                  >
+                    {film.tagline}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
       )}
     </main>

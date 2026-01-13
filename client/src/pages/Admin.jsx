@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Admin() {
   const [movie, setMovie] = useState({
@@ -12,12 +12,27 @@ export default function Admin() {
     stills: [],
     featured: false,
   });
+  const [editingId, setEditingId] = useState(null);
+  const [existingMovies, setExistingMovies] = useState([]);
+  const [loadingMovies, setLoadingMovies] = useState(false);
   const [currentIntrigue, setCurrentIntrigue] = useState("");
   const [currentStill, setCurrentStill] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [posterPreview, setPosterPreview] = useState("");
   const [expandedImage, setExpandedImage] = useState(null);
+
+  useEffect(() => {
+    // Load existing movies
+    setLoadingMovies(true);
+    fetch("/api/movies")
+      .then((r) => r.json())
+      .then((data) => {
+        setExistingMovies(data);
+        setLoadingMovies(false);
+      })
+      .catch(() => setLoadingMovies(false));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -129,8 +144,13 @@ export default function Admin() {
         return;
       }
 
-      const res = await fetch("http://localhost:4000/api/movies", {
-        method: "POST",
+      const method = editingId ? "PUT" : "POST";
+      const endpoint = editingId
+        ? `http://localhost:4000/api/movies/${editingId}`
+        : "http://localhost:4000/api/movies";
+
+      const res = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -140,10 +160,14 @@ export default function Admin() {
 
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || "Failed to create movie");
+        throw new Error(error.message || "Failed to save movie");
       }
 
-      setMessage("✓ Film added successfully!");
+      setMessage(
+        editingId
+          ? "✓ Film updated successfully!"
+          : "✓ Film added successfully!"
+      );
       setMovie({
         slug: "",
         title: "",
@@ -157,11 +181,63 @@ export default function Admin() {
       });
       setCurrentIntrigue("");
       setCurrentStill("");
+      setEditingId(null);
+      setPosterPreview("");
+
+      // Reload movies list
+      const updatedMovies = await fetch("/api/movies").then((r) => r.json());
+      setExistingMovies(updatedMovies);
     } catch (error) {
       setMessage(`✗ Error: ${error.message}`);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = (movieToEdit) => {
+    setMovie(movieToEdit);
+    setEditingId(movieToEdit.id);
+    setPosterPreview(movieToEdit.posterUrl);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this film?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:4000/api/movies/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to delete movie");
+
+      setMessage("✓ Film deleted successfully!");
+      const updatedMovies = await fetch("/api/movies").then((r) => r.json());
+      setExistingMovies(updatedMovies);
+    } catch (error) {
+      setMessage(`✗ Error: ${error.message}`);
+    }
+  };
+
+  const handleCancel = () => {
+    setMovie({
+      slug: "",
+      title: "",
+      tagline: "",
+      posterUrl: "",
+      synopsis: "",
+      theme: "hope",
+      intrigues: [],
+      stills: [],
+      featured: false,
+    });
+    setEditingId(null);
+    setPosterPreview("");
+    setMessage("");
   };
 
   const inputStyle = {
@@ -201,7 +277,7 @@ export default function Admin() {
 
   return (
     <main className="shell">
-      <h1>Add New Film</h1>
+      <h1>{editingId ? "Edit Film" : "Add New Film"}</h1>
       <div className="card" style={{ padding: "2rem", maxWidth: "700px" }}>
         <form onSubmit={handleSubmit}>
           {/* Basic Info Section */}
@@ -587,16 +663,176 @@ export default function Admin() {
             </div>
           )}
 
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={loading}
-            style={{ width: "100%", padding: "1rem", fontSize: "1rem" }}
-          >
-            {loading ? "Adding Film..." : "✨ Add Film"}
-          </button>
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={loading}
+              style={{ flex: 1, padding: "1rem", fontSize: "1rem" }}
+            >
+              {loading
+                ? editingId
+                  ? "Updating..."
+                  : "Adding..."
+                : editingId
+                ? "✨ Update Film"
+                : "✨ Add Film"}
+            </button>
+            {editingId && (
+              <button
+                type="button"
+                onClick={handleCancel}
+                style={{
+                  padding: "1rem 1.5rem",
+                  background: "transparent",
+                  border: "1px solid var(--accent-ruby)",
+                  color: "var(--accent-ruby)",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "rgba(239, 68, 68, 0.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
       </div>
+
+      {/* Existing Films List */}
+      {existingMovies.length > 0 && (
+        <div style={{ marginTop: "3rem" }}>
+          <h2>Existing Films ({existingMovies.length})</h2>
+          <div className="card" style={{ padding: "1.5rem" }}>
+            {loadingMovies ? (
+              <p style={{ color: "var(--muted)" }}>Loading films...</p>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                {existingMovies.map((m) => (
+                  <div
+                    key={m.id}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "100px 1fr auto auto",
+                      gap: "1rem",
+                      alignItems: "center",
+                      padding: "1rem",
+                      background: "rgba(15, 22, 41, 0.5)",
+                      borderRadius: "8px",
+                      borderLeft: `4px solid ${
+                        {
+                          hope: "#fbbf24",
+                          release: "#ef4444",
+                          discomfort: "#ff6b35",
+                          courage: "#10d981",
+                          reflection: "#3b82f6",
+                          existential: "#a855f7",
+                        }[m.theme] || "#c0c9e0"
+                      }`,
+                    }}
+                  >
+                    <img
+                      src={m.posterUrl}
+                      alt={m.title}
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setExpandedImage(m.posterUrl)}
+                    />
+                    <div>
+                      <h4 style={{ margin: "0 0 0.3rem" }}>{m.title}</h4>
+                      <p
+                        style={{
+                          color: "var(--muted)",
+                          margin: "0 0 0.3rem",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        {m.tagline}
+                      </p>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          fontSize: "0.75rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          color: "var(--muted)",
+                          background: "rgba(192, 201, 224, 0.1)",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {m.theme}
+                        {m.featured && " • Featured"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleEdit(m)}
+                      style={{
+                        padding: "0.5rem 1rem",
+                        background: "transparent",
+                        border: "1px solid var(--accent-primary)",
+                        color: "var(--accent-primary)",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: "0.85rem",
+                        transition: "all 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.background = "rgba(192, 201, 224, 0.1)";
+                        e.target.style.background = "rgba(192, 201, 224, 0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = "transparent";
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(m.id)}
+                      style={{
+                        padding: "0.5rem 1rem",
+                        background: "transparent",
+                        border: "1px solid var(--accent-ruby)",
+                        color: "var(--accent-ruby)",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: "0.85rem",
+                        transition: "all 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = "rgba(239, 68, 68, 0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = "transparent";
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Image Expansion Modal */}
       {expandedImage && (
