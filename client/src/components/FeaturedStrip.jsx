@@ -1,5 +1,14 @@
 import { Link } from "react-router-dom";
 
+const themeColors = {
+  hope: "#fbbf24",
+  release: "#ef4444",
+  discomfort: "#ff6b35",
+  courage: "#10d981",
+  reflection: "#3b82f6",
+  existential: "#a855f7",
+};
+
 export function FeaturedStrip({ movies }) {
   if (!movies?.length) return null;
   return (
@@ -37,6 +46,9 @@ export function FeaturedStrip({ movies }) {
                       cursor: "pointer",
                       transition: "all 0.2s ease",
                       opacity: 0.8,
+                      color: themeColors[m.theme] || "var(--accent-primary)",
+                      borderColor: themeColors[m.theme] || "var(--accent-primary)",
+                      backgroundColor: `${themeColors[m.theme] || "var(--accent-primary)"}20`,
                     }}
                     onMouseEnter={(e) => {
                       e.target.style.opacity = "1";
