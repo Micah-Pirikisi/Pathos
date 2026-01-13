@@ -1,9 +1,24 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  // Create curator account
+  const curatorPassword = await bcrypt.hash("curator", 10);
+  await prisma.user.upsert({
+    where: { email: "curator@pathos.local" },
+    update: { isCurator: true },
+    create: {
+      email: "curator@pathos.local",
+      password: curatorPassword,
+      isCurator: true,
+    },
+  });
+
+  console.log("✓ Curator account created/updated: curator@pathos.local");
+
   const movies = [
     {
       slug: "in-the-mood-for-love",
@@ -16,7 +31,7 @@ async function main() {
         "Step-printing that stretches time",
         "Nat King Cole as memory motif",
       ],
-      theme: "yearning",
+      theme: "reflection",
       stills: ["/stills/itmol-1.jpg", "/stills/itmol-2.jpg"],
       featured: true,
     },
@@ -31,7 +46,7 @@ async function main() {
         "Symmetry and negative space",
         "Conversations carried by pauses",
       ],
-      theme: "reflection",
+      theme: "courage",
       stills: ["/stills/columbus-1.jpg"],
       featured: true,
     },
@@ -44,6 +59,8 @@ async function main() {
       create: movie,
     });
   }
+
+  console.log("✓ Movies seeded successfully");
 }
 
 main()

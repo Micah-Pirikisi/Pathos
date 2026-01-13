@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
+const themeColors = {
+  hope: "#fbbf24",
+  release: "#ef4444",
+  discomfort: "#ff6b35",
+  courage: "#10d981",
+  reflection: "#3b82f6",
+  existential: "#a855f7",
+};
+
 export default function MovieDetail() {
   const { slug } = useParams();
   const [movie, setMovie] = useState(null);
+  const [expandedImage, setExpandedImage] = useState(null);
 
   useEffect(() => {
     fetch(`/api/movies/${slug}`)
@@ -24,7 +34,13 @@ export default function MovieDetail() {
           gridTemplateColumns: "minmax(260px, 320px) 1fr",
         }}
       >
-        <img src={movie.posterUrl} alt={movie.title} className="poster" />
+        <img
+          src={movie.posterUrl}
+          alt={movie.title}
+          className="poster"
+          onClick={() => setExpandedImage(movie.posterUrl)}
+          style={{ cursor: "pointer" }}
+        />
         <div>
           <p className="meta" style={{ marginBottom: "0.3rem" }}>
             {movie.theme || "—"}
@@ -34,7 +50,14 @@ export default function MovieDetail() {
               fontFamily: "serif",
               fontSize: "2rem",
               margin: "0 0 0.4rem",
+              background: `linear-gradient(135deg, ${
+                themeColors[movie.theme] || "var(--accent-gold)"
+              }, var(--ink))`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
+            className="no-underline"
           >
             {movie.title}
           </h1>
@@ -60,11 +83,18 @@ export default function MovieDetail() {
                   key={i}
                   src={s}
                   alt={`${movie.title} still ${i + 1}`}
+                  onClick={() => setExpandedImage(s)}
                   style={{
                     width: "140px",
                     borderRadius: "8px",
                     border: "1px solid var(--border)",
+                    cursor: "pointer",
+                    transition: "transform 0.2s",
                   }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 />
               ))}
             </div>
@@ -74,6 +104,73 @@ export default function MovieDetail() {
       <p className="meta" style={{ marginTop: "1rem" }}>
         <Link to="/movies">← Back to films</Link>
       </p>
+
+      {/* Image Expansion Modal */}
+      {expandedImage && (
+        <div
+          onClick={() => setExpandedImage(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            cursor: "pointer",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "relative",
+              background: "#0f1629",
+              border: "2px solid var(--accent-primary)",
+              borderRadius: "12px",
+              padding: "1.5rem",
+              maxWidth: "90vw",
+              maxHeight: "90vh",
+              boxShadow: "0 0 40px rgba(255, 107, 53, 0.3)",
+            }}
+          >
+            <button
+              onClick={() => setExpandedImage(null)}
+              style={{
+                position: "absolute",
+                top: "1rem",
+                right: "1rem",
+                background: "transparent",
+                border: "none",
+                color: "var(--muted)",
+                cursor: "pointer",
+                fontSize: "1.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0",
+                opacity: 0.6,
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => (e.target.style.opacity = "1")}
+              onMouseLeave={(e) => (e.target.style.opacity = "0.6")}
+            >
+              ✕
+            </button>
+            <img
+              src={expandedImage}
+              alt="Expanded view"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "80vh",
+                borderRadius: "8px",
+              }}
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
