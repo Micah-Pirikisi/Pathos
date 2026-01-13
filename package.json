@@ -10,7 +10,7 @@
     "dev:client": "cd client && npm run dev",
     "prisma:seed": "node --import dotenv/config prisma/seed.js",
     "build": "cd client && npm install && npm run build",
-    "start": "node server/server.js"
+    "start": "npx prisma migrate deploy && node server/server.js"
   },
   "repository": {
     "type": "git",
