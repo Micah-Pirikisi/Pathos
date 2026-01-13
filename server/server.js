@@ -205,7 +205,7 @@ app.get("/api/themes", async (_req, res) => {
 });
 
 // Serve React app for all other routes (client-side routing)
-app.get("*", (_req, res) => {
+app.use((_req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
