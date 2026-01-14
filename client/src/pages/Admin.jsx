@@ -145,9 +145,7 @@ export default function Admin() {
       }
 
       const method = editingId ? "PUT" : "POST";
-      const endpoint = editingId
-        ? `/api/movies/${editingId}`
-        : "/api/movies";
+      const endpoint = editingId ? `/api/movies/${editingId}` : "/api/movies";
 
       const res = await fetch(endpoint, {
         method,

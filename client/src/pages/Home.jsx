@@ -41,11 +41,25 @@ export default function Home() {
             margin: "0 0 0.6rem",
           }}
         >
-          Pathos
+          Want to see a particular film on this website?
         </h2>
         <p style={{ color: "var(--muted)" }}>
-          Curated cinema as quiet editorial. Less scroll, more linger. Featured
-          picks float above; dive deeper in the Films index.
+          Send your recommendations to{" "}
+          <a
+            href="mailto:micahpirikski@gmail.com"
+            style={{
+              color: "var(--accent-gold)",
+              textDecoration: "none",
+              borderBottom: "1px solid var(--accent-gold)",
+              transition: "opacity 0.2s ease",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
+            onMouseLeave={(e) => (e.target.style.opacity = "1")}
+          >
+            micahpirikski@gmail.com
+          </a>
+          .
         </p>
       </section>
       {filmOfWeek && (

@@ -15,14 +15,16 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Serve static files from client/dist (but not API routes)
-app.use(express.static(path.join(__dirname, "../client/dist"), {
-  // Don't serve index.html for /api routes
-  setHeaders: (res, path) => {
-    if (path.endsWith("index.html")) {
-      res.setHeader("Cache-Control", "no-cache");
-    }
-  }
-}));
+app.use(
+  express.static(path.join(__dirname, "../client/dist"), {
+    // Don't serve index.html for /api routes
+    setHeaders: (res, path) => {
+      if (path.endsWith("index.html")) {
+        res.setHeader("Cache-Control", "no-cache");
+      }
+    },
+  })
+);
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
