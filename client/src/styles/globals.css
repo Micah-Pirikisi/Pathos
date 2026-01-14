@@ -678,7 +678,7 @@ h3 {
   .card {
     padding: 1.2rem !important;
   }
-  
+
   .meta {
     font-size: 0.85rem;
   }
@@ -689,16 +689,16 @@ h3 {
     padding: 1rem !important;
     border-radius: 12px;
   }
-  
+
   .meta {
     font-size: 0.75rem;
   }
-  
+
   .featured-badge {
     padding: 0.35rem 0.75rem;
     font-size: 0.65rem;
   }
-  
+
   .tag {
     padding: 0.25rem 0.65rem;
     font-size: 0.65rem;
@@ -708,26 +708,39 @@ h3 {
 /* Film of the week responsive grid */
 @media (max-width: 768px) {
   .film-of-week-grid {
-    gridTemplateColumns: 1fr 1fr !important;
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 
 @media (max-width: 480px) {
   .film-of-week-grid {
-    gridTemplateColumns: 1fr !important;
+    grid-template-columns: 1fr !important;
   }
 }
 
 /* Movie detail responsive grid */
 @media (max-width: 768px) {
   .movie-detail-grid {
-    gridTemplateColumns: 1fr !important;
+    grid-template-columns: 1fr !important;
+    overflow: hidden;
+  }
+  
+  .movie-detail-grid img {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .movie-detail-grid h1,
+  .movie-detail-grid p,
+  .movie-detail-grid ul {
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 }
 
 /* Admin page responsive */
 @media (max-width: 768px) {
   .admin-movie-row {
-    gridTemplateColumns: 1fr !important;
+    grid-template-columns: 1fr !important;
   }
 }
