@@ -10,7 +10,7 @@ export function Header({ user, onLogout }) {
         to="/"
         style={{
           fontFamily: "serif",
-          fontSize: "2rem",
+          fontSize: "clamp(1.5rem, 5vw, 2rem)",
           fontWeight: 600,
           background:
             "linear-gradient(135deg, var(--accent-primary), var(--accent-gold))",
@@ -23,7 +23,13 @@ export function Header({ user, onLogout }) {
         Pathos
       </Link>
       <nav
-        style={{ display: "flex", gap: "1rem", alignItems: "center" }}
+        style={{
+          display: "flex",
+          gap: "clamp(0.5rem, 2vw, 1rem)",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+        }}
         className="meta"
       >
         <Link to="/movies">Films</Link>

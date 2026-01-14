@@ -89,6 +89,7 @@ export default function Home() {
                 gridTemplateColumns: "minmax(160px, 180px) 1fr",
                 alignItems: "start",
               }}
+              className="film-of-week-grid"
             >
               <img
                 src={filmOfWeek.posterUrl}

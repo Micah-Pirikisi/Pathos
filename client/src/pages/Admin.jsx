@@ -741,6 +741,7 @@ export default function Admin() {
                         }[m.theme] || "#c0c9e0"
                       }`,
                     }}
+                    className="admin-movie-row"
                   >
                     <img
                       src={m.posterUrl}

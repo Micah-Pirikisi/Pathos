@@ -69,7 +69,7 @@ export default function MovieDetail() {
         <span>{movie.title}</span>
       </nav>
       <article
-        className="card movie-detail-card"
+        className="card movie-detail-card movie-detail-grid"
         data-theme={movie.theme}
         style={{
           padding: "1.5rem",
