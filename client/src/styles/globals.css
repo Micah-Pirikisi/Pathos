@@ -724,12 +724,12 @@ h3 {
     grid-template-columns: 1fr !important;
     overflow: hidden;
   }
-  
+
   .movie-detail-grid img {
     max-width: 100%;
     width: 100%;
   }
-  
+
   .movie-detail-grid h1,
   .movie-detail-grid p,
   .movie-detail-grid ul {
