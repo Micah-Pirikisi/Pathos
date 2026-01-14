@@ -462,6 +462,13 @@ header nav a:hover {
   animation: slideUp 0.2s ease;
 }
 
+/* Hide tooltips on mobile to prevent overflow */
+@media (max-width: 768px) {
+  .tooltip:hover::after {
+    display: none;
+  }
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -742,5 +749,12 @@ h3 {
 @media (max-width: 768px) {
   .admin-movie-row {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* Theme description tooltips - hide on mobile */
+@media (max-width: 768px) {
+  .theme-description {
+    display: none !important;
   }
 }

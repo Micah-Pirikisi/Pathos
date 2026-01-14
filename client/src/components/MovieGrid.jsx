@@ -97,6 +97,7 @@ export function MovieGrid({ movies, onFilter, themes, activeTheme }) {
                   </button>
                   {hoveredTheme === t && themeDescriptions[t] && (
                     <div
+                      className="theme-description"
                       style={{
                         position: "absolute",
                         bottom: "120%",
