@@ -2,7 +2,7 @@
 
 A full-stack web application for discovering and curating thematic film collections. Built to demonstrate modern full-stack development practices with a focus on clean architecture, security, and user experience.
 
-[Live Demo](#) | [Repository](https://github.com/Micah-Pirikski/Pathos)
+[Live Demo](https://pathos.up.railway.app/) | [Repository](https://github.com/Micah-Pirikisi/Pathos)
 
 ---
 
